@@ -45,7 +45,7 @@ A command-line interface to output a single bibtex citation from Google Scholar.
 Examples:
 
 # Retrieve one article written by Einstein on quantum theory:
-gscholar2bibtex.py -p "albert einstein" -p "quantum theory" -c cookie_file.txt
+gscholar2bibtex.py -p "albert einstein" -p "quantum theory" -u useragent.txt -c cookie_file.txt
 """
 
     fmt = optparse.IndentedHelpFormatter(max_help_position=50, width=100)
@@ -55,6 +55,10 @@ gscholar2bibtex.py -p "albert einstein" -p "quantum theory" -c cookie_file.txt
                       default=[],
                       action='append',
                       help='Results must contain exact phrase or phrases')
+    parser.add_option('-u', '--ua-file',
+                      metavar='FILE',
+                      default=None,
+                      help='File that contains the useragent (web-browser) that the cookie was generated for')
     parser.add_option('-c', '--cookie-file',
                       metavar='FILE',
                       default=None,
@@ -68,6 +72,10 @@ gscholar2bibtex.py -p "albert einstein" -p "quantum theory" -c cookie_file.txt
 
     # Show help if we have neither keyword search nor author name
     if len(sys.argv) == 1:
+        parser.print_help()
+        return 1
+
+    if options.ua_file is None:
         parser.print_help()
         return 1
 
@@ -92,7 +100,8 @@ gscholar2bibtex.py -p "albert einstein" -p "quantum theory" -c cookie_file.txt
     urltail = '&hl=en'
     url = urlhead+phrase_list+urltail
 
-    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36'
+    with open(options.ua_file, 'r') as uafile:
+        user_agent = uafile.read().replace('\n', '')
     with open(options.cookie_file, 'r') as mycookiefile:
         my_cookie = mycookiefile.read().replace('\n', '')
     headers = {'User-Agent': user_agent, 'Cookie': my_cookie}
