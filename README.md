@@ -57,11 +57,11 @@ Try gscholar2bibtex.py --help for all available options.
 
 Retrieve BibTeX entry article written by Einstein on quantum theory:
 
-    $ gscholar2bibtex.py --phrase "albert einstein" --phrase gscholar2bibtex.py -c cookie_file.txt
+    $ gscholar2bibtex.py --phrase "albert einstein" --phrase "quantum theory"-u useragent.txt -c cookie_file.txt
 
 Retrieve a BibTeX entry from a PDF file on disk.
 
-    $ ./gscholar2bibtex.py -f my_paper.pdf -c cookie_file.txt
+    $ ./gscholar2bibtex.py -f my_paper.pdf -u useragent.txt -c cookie_file.txt
 
 
 License
